@@ -5,5 +5,3 @@
 3. 복사가 완료되면 내 컴퓨터의 파일들을 git 저장소에 등록 : git add .
 4. 등록 후 커밋 : git commit -m "쓰고 싶은 말"
 5. github 에 로컬 파일들 업로드 : git push https://github.com/simboyz/threejs_ko_tutorial.git master
-
-https://github.com/simboyz/threejs_ko_tutorial.git
