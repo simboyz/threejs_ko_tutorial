@@ -19,6 +19,7 @@ body, html {
     outline: none;
     color:#444;
     font-size: 12px;
+	line-height: 1.8;
 }
 
 a {
