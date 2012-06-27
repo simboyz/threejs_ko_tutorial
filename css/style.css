@@ -1,0 +1,39 @@
+﻿/**
+ * @author: Han Seob Sim
+ * email: simboyz.com@gmail.com
+ * last update: 2012.06.27
+ * homepage: facebook.com/simboyz
+ */
+ 
+@font-face {
+    font-family: ngwoff;
+    src: url(fonts/NanumGothic.woff)
+}
+@font-face {
+    font-family: ngeot;
+    src: url(fonts/NanumGothic.eot)
+}
+
+body, html {
+    font-family: "나눔고딕", NanumGothic, ngwoff, ngeot, "맑은고딕", Arial, Helvetica, sans-serif;
+    outline: none;
+    color:#444;
+    font-size: 12px;
+}
+
+#container {
+	width:880px;
+	margin:0 auto;
+}
+
+header {
+	border-bottom:1px solid #ccc;
+}
+
+#index_list {
+	border-bottom:1px solid #ccc;
+}
+
+article {
+	padding : 20px;
+}
