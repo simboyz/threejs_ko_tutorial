@@ -25,7 +25,7 @@
 		
 		<header>
 			<h1>Three.js 앱 개발하기</h1>
-			<h3>By 심 한섭 <a href="http://twitter.com/simboyz">@simboyz</a></h3>
+			<p>By 심 한섭 <a href="http://twitter.com/simboyz">@simboyz</a></p>
 			
 		</header>
 		<section id="index_list">
@@ -37,7 +37,51 @@
 		<article id="Features">
 			<p>Three.js 에는 다음과 같은 특징들이 있습니다.</p>
 			<ul>
-				<li>렌더러(Renderer) : canvas, svg, WebGL</li>
+				<li>
+					렌더러(Renderer) : canvas, svg, WebGL / 효과들(effects) ; 입체효과(anaglyph), 사시효과(crosseyed), 스테레오타입(stereo) 등등 이상
+				</li>
+				<li>
+					장면(Scenes) : 런타임(실행시간) 동안 객체를 추가하거나 제거 ; 안개효과(fog)
+				</li>
+				<li>
+					카메라(Scenes) : 원근법 카메라(perspective)와 직각투영 카메라(orthographic) ; 컨트롤러(controller), 트랙볼(trackball), 1인칭 슈팅게임(FPS), 경로 등등(path and more)
+				</li>
+				<li>
+					애니메이션(Animation) : 모핑(morph : 이미지를 자연스럽게 바꾸기), 키프레임(keyframe)
+				</li>
+				<li>
+					빛(Lights) : 잔진한 빛(ambient), 방향성 빛(direction), 포인트 빛(point), 스팟라이트(spot lights : 환한조명) ; 그림자(shadows) : 주고 받기(cast and receive)
+				</li>
+				<li>
+					재료(Materials) : 
+					람베르트(<a href="http://krdic.naver.com/detail.nhn?docid=11557800" target="_blank">Lambert</a>), 
+					펑세이딩(<a href="http://terms.naver.com/entry.nhn?docId=350366&mobile&categoryId=341" target="_blank">phong</a>),
+					이외에도 더 다양하다. 모든 재료는 질감과 세이딩 효과가 적용됩니다.					
+				</li>
+				<li>
+					쉐이더(Shader) : WebGL 에서 접근 가능한 모든 것이 적용되어 있습니다; 렌즈 플레어, ---<i>추가 작업 필요</i>
+				</li>
+				<li>
+					객체(Objects) : 그물코(meshes), 입자(particles), 스프라이트(sprite), 선(lines), 리본(ribbons), 뼈대(bones) 등등이 세부 사항까지 정의 되어 있습니다.
+				</li>
+				<li>
+					기하구조(Geometry) : 평면(plane), 입방체(cube), 구(sphere), 원형 융기(torus), 3D 텍스트 등등이 있습니다. ---<i>추가 작업 필요</i>
+				</li>
+				<li>
+					로더(Loader) : 바이너리(binary), 이미지(image), JSON 그리고 장면
+				</li>
+				<li>
+					유틸리티(Utilities) : 3D 수식 함수들 거의 대부분을 포함하였습니다. frustrum, Quaternian, matrix, UVs 등을 포함해서 말입니다.
+				</li>
+				<li>
+					Export / Import : Three.js 에서 사용가능한 JSON 을 만들어 주는 도구들 : 가능한 파일 포맷 - Blender, CTM, FBX, 3D Max, and OBJ
+				</li>
+				<li>
+					지원(Support) : 아직 작업중인 API 문서. 작동에 대한 포럼과 위키의 내용들.
+				</li>
+				<li>
+					예제(Examples) : 150 개가 넘는 예제들 수록
+				</li>
 			</ul>
 		</article>
 			
