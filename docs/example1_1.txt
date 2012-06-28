@@ -1,0 +1,22 @@
+﻿<pre>
+<h5>Example 1-1</h5>
+<small>먼저 화면 구성에 필요한 변수들을 정의합니다.</small>
+var scene, camera, mesh, renderer;
+
+<small>정의된 요소들을 화면에 배치 합니다.</small>
+var init = function(){
+	
+	<small>THREE 로 부터 다음과 각가의 요소들 마다 다음과 같이 클래스를 상속합니다.</small>
+	scene = new THREE.Scene();
+	camara = new THREE.PerspectiveCamera();
+	mesh = new THREE.Mesh();
+	renderer = new THREE.WebGLRenderer();
+	
+	<small>렌더러를 통해서 화면의 원하는 위치에 canvas 를 붙입니다.</small>
+	document.body.appendChild(renderer.domElement);
+	
+};
+
+init();
+
+</pre>

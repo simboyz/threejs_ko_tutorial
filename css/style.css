@@ -18,7 +18,7 @@ body, html {
     font-family: "나눔고딕", NanumGothic, ngwoff, ngeot, "맑은고딕", Arial, Helvetica, sans-serif;
     outline: none;
     color:#444;
-    font-size: 12px;
+    font-size: .9em;
 	line-height: 1.8;
 }
 
@@ -26,6 +26,10 @@ a {
 	text-decoration:none;
 }
 
+h5 {
+	color: green;
+	margin: 0;
+}
 #container {
 	width:880px;
 	margin:0 auto;
@@ -35,10 +39,27 @@ header {
 	border-bottom:1px solid #ccc;
 }
 
-#index_list {
-	border-bottom:1px solid #ccc;
+
+section, article {
+	border-bottom: 1px solid #CCC;
+	padding-bottom: 10px;
 }
 
-article {
-	padding : 20px;
+code {
+	padding: 10px 20px;
+	background: #EEE;
+	display: block;
+	margin: 0 auto;
+	width: 90%;
+	color: black;
+	border-radius: 4px;
+}
+
+code small {
+	color:#999;
+}
+
+pre {
+	font-family : "나눔고딕", arial;
+	line-height : 1.8;
 }
