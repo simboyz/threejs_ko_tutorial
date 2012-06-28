@@ -1,0 +1,59 @@
+﻿<pre>
+<h5>Example 2-1</h5>
+<small>객체에 해당하던 mesh 를 line 객체로 바꾸었습니다.</small>
+var scene, camera, line, renderer;
+
+var init = function(){
+	
+	// scene
+	scene = new THREE.Scene();
+	
+	// camera <small> for 시야각 / aspect 종횡비 / near 근경 / far 원경</small>
+	var fov = 45, aspect = 1, near = 1, far = 500;
+	camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+	<small> camera.position.set 을 이용하여 한번에 위치를 잡습니다.</small>
+	camera.position.set(0, 0, 100);
+	<small> camera.lookAt 을 이용하여 카메라가 보는 방향을 잡습니다.</small>
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	
+	// line
+	var geometry, material;
+	<small>기하구조체를 이번에는 선으로 설정하고 옵션을 지정합니다.</small>	
+	material = new THREE.LineGeometry({
+		color: 0x0000ff,
+		lineWidth: 10
+	});
+	<small>선에서 사용 할 수 있는 옵션에는 color, opacity, blending, lineWidth, linecap, linejoin, vertexColors, fog 가 있습니다.</small>
+	<small>다만 lineWidth 의 경우 WebGL 에서 1 값만 지정할 수 있습니다.</small>
+	
+	geometry = new THREE.Geometry();
+	geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
+	geometry.vertices.push(new THREE.Vector3(0, 10, 0));
+	geometry.vertices.push(new THREE.Vector3(10, 0, 0));
+	<small>라인을 구성하는 좌표 값을 기하구조에 지정합니다. path 처럼 앞의 정점을 기준으로 선이 그려집니다.</small>
+	
+	line = new THREE.line(geometry,material);
+	
+	// combine all stuff
+	scene.add(camera);
+	scene.add(mesh);
+	
+	// renderer
+	<small>WebGL 랜더러가 lineWidth 옵션 지원하지 않아서 이번에는 CanvasRenderer 를 이용했습니다.</small>
+	renderer = new THREE.CanvasRenderer();				
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	
+	document.body.appendChild(renderer.domElement);			
+};
+
+init();
+
+var animate = function(){
+	requestAnimationFrame( animate );
+	<small>mesh 로 설정된 녀석을 line으로 교체</small>
+	mesh.rotation.x += 0.005;
+	mesh.rotation.y += 0.01;	
+	renderer.render( scene, camera );
+};
+animate();
+</pre>

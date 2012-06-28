@@ -30,6 +30,12 @@ h5 {
 	color: green;
 	margin: 0;
 }
+blockquote {
+	border: 1px dotted #CCC;
+	padding: 10px;
+	background: #EEE;
+}
+
 #container {
 	width:880px;
 	margin:0 auto;
@@ -62,4 +68,8 @@ code small {
 pre {
 	font-family : "나눔고딕", arial;
 	line-height : 1.8;
+}
+
+.to-center {
+	text-align:center;	
 }
