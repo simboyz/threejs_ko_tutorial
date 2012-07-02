@@ -347,7 +347,7 @@ var Tetris.init = function(){
 	Tetris.camera.position.z = 600;
 	Tetris.scene.add(Tetris.camera);
 	
-	// 렌더러 시작하기
+	// 렌더러 크기 설정하기
 	Tetris.renderer.setSize( winWidth, winHeight );
 	
 	// DOM 에 렌더러가 제공해준 결과물 붙이기
@@ -355,6 +355,63 @@ var Tetris.init = function(){
 	// 설명후에 계속 이어집니다.
 
 				</pre>
+				<p>
+				위에서 설정한 Tetris.init 은 Three.js 객체를 만들었고, 그 객체를 전역 변수에 할당했습니다. 렌더러와 씬(Scene) 그리고 카메라를 배치했습니다. 저는 게임이 윈도우 전체를 사용하기를 원하기 때문에 window.innerWidth 와 window.innerHeight 를 사용했습니다. 만약 원한다면 <a href="http://learningthreejs.com/blog/2011/11/17/lets-make-a-3d-game-make-it-fullscreen/">fullscreen API</a> 를 이용해서 만드실 수도 있습니다. 카메라의 위치를 뒤쪽으로 옮겼고, 실제 거리와 크기는 당신이 사용하는 게임의 크기에 맞추어 정할 수 있습니다.
+				</p>
+				<p>
+				우리의 게임 세계는 3D 와이어프레임으로 구성된 세계이고, 그곳에서 박스가 떨어질 수 있습니다. 당신이 게임에 관한 작업을 할 때, 최종 결과가 무엇보다도 중요하다는 것을 알 수 있을 겁니다. 교묘하게 속이는 것을 두려워 하면 안되요! 지금과 같은 경우에는 박스 경계선 위에 선을 그려야할 좋은 이유가 없습니다. 우리는 보통의 박스 기하체를 이용하겠습니다. 그리고 모든 연결되는 정점을 라인으로 연결하겠습니다 보통 사용하는 삼각형 말구요. 그리고 운 좋게도 Three.js 문법에 그게 있습니다.
+				</p>
+				
+				<pre name="code" class="javascript:nogutter">
+	// 객체 설정
+	var boundingBoxConfig = {
+		width: 360,
+		height: 360,
+		depth: 1200,
+		splitX: 6,
+		splitY: 6,
+		splitZ: 20
+	};
+	
+	Tetris.boundingBoxConfig = boundingBoxConfig;
+	Tetris.blockSize = boundingBoxConfig.width/boundingBoxConfig.splitX;
+	
+	var boundingBox = new THREE.Mesh(
+		new THREE.CubeGeometry(
+			boundingBoxConfig.width, boundingBoxConfig.height, boundingBoxConfig.depth,
+			boundingBoxConfig.splitX, boundingBoxConfig.splitY, boundingBoxConfig.splitZ
+		),
+		new THREE.MeshBasicMaterial({
+			color : 0xffaa00,
+			wireframe : true
+		});
+	);
+	
+	Tetris.scene.add(boundingBox);
+	
+	//첫 렌더링
+	Tetris.renderer.render(Tetris.scene, Tetris.camera);
+	
+	// 설명후에 계속 이어집니다.
+				</pre>
+				
+				<p>
+					Three.js API 에서 <a href="http://threejs.org/io/s/CubeGeometry">CubeGeometry</a> 는 다음과 같이 설정하도록 되어있습니다.
+				</p>
+				<pre name="code" class="javascript:nogutter">
+(
+	width &lt;Number&gt;, 
+	height &lt;Number&gt;, 
+	depth &lt;Number&gt;, 
+	segmentsWidth &lt;Number&gt;, 
+	segmentsHeight &lt;Number&gt;, 
+	segmentsDepth &lt;Number&gt;, 
+	materials &lt;Array&gt;, 
+	sides &lt;Object&gt;
+)
+				</pre>
+				<p> 우리는 "segmentX" 옵션으로 우리 게임보드에 딱 맞도록 만들었습니다. 또한 라인을 직접 그리는 대신에 와이어 MeshBasicMaterial 의 와어어 프레임을 이용했습니다.</p>
+				
 				
 				<h3 id="Make_tetris_2">Part 2</h3>
 				
