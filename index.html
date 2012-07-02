@@ -20,7 +20,7 @@
 		<![endif]-->
 		<link rel="stylesheet" href="css/style.css"/>
 		<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js "></script>
-		
+		<link type="text/css" rel="stylesheet" href="js/syntax/styles/SyntaxHighlighter.css"></link>
 	</head>
 	<body>
 		<div id="container">
@@ -39,6 +39,7 @@
 					<li><a href="#Draw_line">선 그리기</a></li>
 					<li><a href="#Shader">쉐이더 이해하기</a></li>
 					<li><a href="#Load_obj">모델링 불러서 쓰기</a></li>
+					<li><a href="#Make_tetris">테트리스 만들기</a></li>
 				</ul>
 			</section>
 			<article id="Features">
@@ -130,7 +131,7 @@
 				</p>
 				<p class="to-center">
 					<a href="examples/example1.html" target="_blank">
-						<img src="img/example1.png" alt="example1"><br/>DEMO
+					<img src="img/example1.png" alt="example1"><br/>DEMO
 					</a>
 				</p>
 			</article>
@@ -148,7 +149,7 @@
 				</script>
 				<p>
 					<a href="examples/example2.html" target="_blank">
-						DEMO
+					DEMO
 					</a>
 				</p>
 			</article>
@@ -156,13 +157,13 @@
 				<h2>쉐이더 이해하기</h2>
 				<p>3D 그래픽을 처음 접하는 사람이라면 일단 용어들 부터가 생소합니다. 저 역시 마찬가지 인데요. 그중에서도 쉐이더라는 용어가 특히 아리송했습니다. 비슷한 사례로 비유를 들어보도록 하겠습니다.</p>
 				<p>포토샾의 필터같은 기능과 비슷합니다. 흔히 이야기하는 포샵질과 비슷하게 쉐이더를 적용하면 화면이 이뻐집니다. 거친 선들도 작성된 그물코들은 맨들맨들해 지고, 화면에 몽환적으로 만들수도 있습니다. 그래서 어떤 사람들은 눈속임 기술이라고도 이야기 합니다. 위키에서 정의한 내용을 보면 다음과 같이 나옵니다.
-				<blockquote>
-				컴퓨터 그래픽스 분야에서 셰이더(shader)는 소프트웨어 명령의 집합으로 주로 그래픽 하드웨어의 렌더링 효과를 계산하는 데 쓰인다. 셰이더는 그래픽 처리 장치(GPU)의 프로그래밍이 가능한 렌더링 파이프라인을 프로그래밍하는 데 쓰인다. Direct3D와 오픈지엘 그래픽 라이브러리는 다음과 같이 세 가지의 세이더를 사용한다. 버텍스 셰이더, 지오메트리 셰이더, 픽셀 셰이더
-				</blockquote>
-				위의 정의에서 보듯이 GPU를 사용하기 때문에 GPU 만 좋다면 빵빵하게 효과가 들어갑니다. 반대로 그래픽 카드가 나쁘면 CPU 가 아무리 빨라도 효과가 안 나옵니다.
+					<blockquote>
+						컴퓨터 그래픽스 분야에서 셰이더(shader)는 소프트웨어 명령의 집합으로 주로 그래픽 하드웨어의 렌더링 효과를 계산하는 데 쓰인다. 셰이더는 그래픽 처리 장치(GPU)의 프로그래밍이 가능한 렌더링 파이프라인을 프로그래밍하는 데 쓰인다. Direct3D와 오픈지엘 그래픽 라이브러리는 다음과 같이 세 가지의 세이더를 사용한다. 버텍스 셰이더, 지오메트리 셰이더, 픽셀 셰이더
+					</blockquote>
+					위의 정의에서 보듯이 GPU를 사용하기 때문에 GPU 만 좋다면 빵빵하게 효과가 들어갑니다. 반대로 그래픽 카드가 나쁘면 CPU 가 아무리 빨라도 효과가 안 나옵니다.
 				</p>
 				<p>
-				위키의 정의에 나와있는 용어 중에서 생소한 용어들인 버텍스 쉐이더, 지오메트리 쉐이더, 픽셀 쉐이더에 대해서 간단히 정리하겠습니다. 아래의 정의는 <a href="http://blog.naver.com/blue9954?Redirect=Log&logNo=50101651302">외부 블로그의 글</a>을 참고했습니다.
+					위키의 정의에 나와있는 용어 중에서 생소한 용어들인 버텍스 쉐이더, 지오메트리 쉐이더, 픽셀 쉐이더에 대해서 간단히 정리하겠습니다. 아래의 정의는 <a href="http://blog.naver.com/blue9954?Redirect=Log&logNo=50101651302">외부 블로그의 글</a>을 참고했습니다.
 				</p>
 				<ul>
 					<li>버텍스 쉐이더 : 버텍스를 이용한 효과를 준다. 버텍스의 색, 위치 정보를 바꾸어 줌으로써 효과를 얻는다. 가장 쉬운 예로 버텍스 라이팅, 카툰 외각선 효과가 있다.</li>
@@ -178,7 +179,201 @@
 				<p>먼저 모델을 이용해서 작성된 데모를 보고 각각의 디자인 포맷들을 THREE 용 JSON 으로 변환하는 방법에 대해서 설명을 드리겠습니다.</p>
 			</article>
 			
+			
+			<article id="Make_tetris">
+				
+				<h2>테트리스 만들기</h2>
+				<p>이 시리즈는 <a href="http://www.smashinglabs.pl/3d-tetris-with-three-js-tutorial-part-1">http://www.smashinglabs.pl/ 의 3D 테트리스 시리즈</a>를 번역하였습니다.</p>
+				<h3 id="Make_tetris_1">Part 1</h3>
+				<p>Three.js 를 배우기는 상당히 쉽습니다. 이 시리즈가 최고로 좋은 튜토리얼은 아니겠지만, 저는 제가 3D 테트리스 게임을 만들면서 배운 내용을 공유하겠습나.</p>
+				<ul>
+					<li><a href="Make_tetris_1">Part 1 : 게임 루프의 소개</a></li>
+					<li><a href="Make_tetris_2">Part 2 : 고정된 블록과 점수 기록</a></li>
+					<li><a href="Make_tetris_3">Part 3 : 블록 추가와 이동</a></li>
+					<li><a href="Make_tetris_4">Part 4 : 충돌 감지</a></li>
+					<li><a href="Make_tetris_5">Part 5 : 오디와 스코어링</a></li>					
+				</ul>
+				
+				<h4>준비</h4>
+				<p>
+					먼저 Three.js 파일을 다운 받으세요 : <a href="https://github.com/mrdoob/three.js">https://github.com/mrdoob/three.js</a>
+				</p>
+				<p>
+					저는 또한 mrdoob 씨의 Stats 파일도 이용합니다 : <a href="https://github.com/mrdoob/stats.js">https://github.com/mrdoob/stats.js</a>
+				</p>
+				<p>
+					위쪽에서 여러분에게 필요한 파일은 build 디렉토리 안에 있는 파일들 입니다.
+				</p>
+				<p>
+					Blox 폰트는 메뉴와 포인트에 사용하기 위한 폰트 입니다 : <a href="http://www.dafont.com/blox.font">http://www.dafont.com/blox.font</a>
+				</p>
+				<p>
+					위의 폰트를 사용하기 위해서 Cufon 으로 컨버팅을 합니다 : <a href="http://cufon.shoqolate.com/generate/">http://cufon.shoqolate.com/generate/</a>
+				</p>
+				<p>
+					제 프로젝트의 모든 JS 파일은 JS 폴더에 넣었고, 음악은 music 폴더에 html 은 root 에 넣었습니다.
+				</p>
+				
+				<h4>HTML</h4>
+				<p>저는 게으른 편이라서 CSS 파일들은 그냥 HTML 문서 헤더에 삽입했습니다. 뭐...이렇게 하는것이 그렇게 나쁘지는 않습니다. 왜냐하면 매우 짧아서 캐싱이 그다지 필요하지 않거든요. 길게 설명할 것 까지는 안되기 때문에 그냥 진행하겠습니다. 인트로와 점수를 위한 CSS 입니다. 그리고 초기화를 하면서 모든 JS 파일을 등록하고, cufon 함수를 실행하겠습니다.
+				</p>
+				
+				<pre name="code" class="html:nogutter">
+&lt;!doctype html&gt;
+	&lt;html&gt;
+		&lt;title&gt;Three.js Tetris&lt;/title&gt;
+		&lt;style&gt;
+		body {
+			margin: 0;
+			paddin: 0;
+			overflow: hidden;						
+		}
+		
+		#menu {
+			position: absolute;
+			width: 200px;
+			height: 250px;
+			top: 50%;
+			left: 50%;
+			text-aling: center;
+			border: 3px solid #fff;
+			border-radius: 15px;
+			background: #e36b23;
+			box-shadow: 2px 10px 5px #888;
+		}
+		
+		#menu p {
+			font-weight: 700;
+			color: #fff;
+		}
+		
+		#menu p a {
+			color: #fff;
+		}
+		
+		#menu button {
+			width: 80px;
+			height: 25px;
+			background-color: #c44032;
+			border: 3px solid #fff;
+			border-radius: 5px;
+			font-size: 14px;
+			font-weight: 700;
+			color: #fff;
+		}
+		
+		#points {
+			position: absolute;
+			width: 120px;
+			height: 16px;
+			padding: 12px;
+			top: 20px;
+			right: 80px;
+			border: 3px solid #fff;
+			border-radius: 15px;
+			background: #e36b23;
+			box-shadow: 2px 10px 5px #888;
+			font-size: 14px;
+			font-weight: 700;
+			color: #fff;
+			text-align: right;
+			display: none;
+		}
+		&lt;/style&gt;
+		&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;/head&gt;
+	&lt;body&gt;
+    &lt;div id="menu"&gt;
+		&lt;h1&gt;Three.js Tetris&lt;/h1&gt;
+		&lt;p&gt;
+		  Movement: arrows&lt;br&gt;
+		  Rotation: AD/SW/QE&lt;br&gt;
+		  Author: &lt;a href="http://www.smashinglabs.pl"&gt;smashinglabs.pl&lt;/a&gt;
+		&lt;/p&gt;
+		&lt;button id="play_button"&gt;Play&lt;/button&gt;
+    &lt;/div&gt;
+ 
+    &lt;div id="points"&gt;
+        0
+	&lt;/div&gt;
+	
+	&lt;script type="text/javascript" src="js/Three.js"&gt;&lt;/script&gt;
+	&lt;script type="text/javascript" src="js/Stats.js"&gt;&lt;/script&gt;
+	&lt;script type="text/javascript" src="js/tetris.js"&gt;&lt;/script&gt;
+ 	&lt;script src="js/cufon-yui.js" type="text/javascript"&gt;&lt;/script&gt;
+	&lt;script src="js/Blox_400.font.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        Cufon.replace('#menu h1');
+        Cufon.replace('#points');
+	&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;					
+				</pre>
+				
+				<h4>기초공사와 Three.js 초기화</h4>
+				<p>
+					당신의 게임을 구조화 하는 방법은 여러가지가 있습니다. 게임 포탈에서 호스팅을 받기를 원한다면, 클로저(전역 변수를 사용하지 않는 것) 종류의 것들이 필요할 것입니다. 만약 당신의 게임이 복잡하다면 상속은 아주 유용할 것입니다. 이 프로젝트는 전역변수로 다음과 같이 할당합니다.
+				</p>
+				
+				<pre name="code" class="javascript:nogutter">
+var Tetris = {};
+				</pre>
+				
+				<p>모든 객체와 함수, 그리고 변수들은 Tetris 객체의 맴버로 등록됩니다. 이러한 방법은 당신의 코드를 유지보수 하는데 아주 좋은 방법이고, "this"의 사용을 피하는 방법이기도 합니다. 조금더 개선하기 위해서 제가 사용한 모든 객체들은 싱글톤 입니다. 이 방법의 단점에 대해서는 다음 글 <a href="http://en.wikipedia.org/wiki/God_object"> 전지전능 객체와 다른 모든 것들을 혼합하는 것에 대한 이슈</a>을 참고하시기 바랍니다. 하지만 이 프로젝트에서는 이대로 사용합니다.</p>
+				
+				<p>우리는 이 구조에 대해서는 나중에 다시 이야기 하기로 하고, 지금은 Three.js 만을 초기화 하겠습니다. 저는 <a href="http://www.aerotwist.com/tutorials/getting-started-with-three-js/">Aerotwist</a> 의 깔끔하지만 설명이 충분하고 잘된 튜토리얼을 자주 이용합니다. 다음 내용을 진행하기 전에 참고하시면 좋을 것 같습니다.</p>
+				
+				<pre name="code" class="javascript:nogutter">
+var Tetris.init = function(){
+	// 화면 크기 설정
+	var winWidth = window.innerWidth;
+	var winHeight = window.innerHeight;
+	
+	// 카메라 속성 설정
+	var view_angle = 45, aspect = winWidth / winHeight, near = 0.1, far = 10000;
+	
+	// WebGL 렌더러를 만들고, 카메라를 씬에 넣기
+	Tetris.renderer = new THREE.WebGLRenderer();
+	Tetris.camera = new THREE.PerspectiveCamera(
+		view_angle,
+		aspect,
+		near,
+		far
+	);
+	
+	Tetris.scene = new THREE.Scene();
+	
+	// 카메라 위치의 기본값은 0, 0, 0 이므로 뒤쪽으로 땡겨 놓기
+	Tetris.camera.position.z = 600;
+	Tetris.scene.add(Tetris.camera);
+	
+	// 렌더러 시작하기
+	Tetris.renderer.setSize( winWidth, winHeight );
+	
+	// DOM 에 렌더러가 제공해준 결과물 붙이기
+	
+	// 설명후에 계속 이어집니다.
+
+				</pre>
+				
+				<h3 id="Make_tetris_2">Part 2</h3>
+				
+				<h3 id="Make_tetris_3">Part 3</h3>
+				
+				<h3 id="Make_tetris_4">Part 4</h3>
+				
+				<h3 id="Make_tetris_5">Part 5</h3>
+				
+			</article>
+			
 		</div>
+		<script language="javascript" src="js/syntax/scripts/shCore.js"></script>
+		<script language="javascript" src="js/syntax/scripts/shBrushJScript.js"></script>
+		<script language="javascript" src="js/syntax/scripts/shBrushXml.js"></script>
+		<script language="javascript">
+			dp.SyntaxHighlighter.ClipboardSwf = 'js/syntax/scripts/clipboard.swf';
+			dp.SyntaxHighlighter.HighlightAll('code');
+		</script>
 		<script type="text/javascript" src="js/main.js"></script>
 	</body>
 </html>
