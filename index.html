@@ -411,7 +411,212 @@ var Tetris.init = function(){
 )
 				</pre>
 				<p> 우리는 "segmentX" 옵션으로 우리 게임보드에 딱 맞도록 만들었습니다. 또한 라인을 직접 그리는 대신에 와이어 MeshBasicMaterial 의 와어어 프레임을 이용했습니다.</p>
+				<p>다음은 초기화 함수에서 마지막으로 해야 할 것입니다.</p>
+				<pre name="code" class="javascript:nogutter">
+	Tetris.stats = new Stats();
+	Tetris.stats.domElement.style.position = 'absolute';
+	Tetris.stats.domElement.style.top = '10px';
+	Tetris.stats.domElement.style.left = '10px';
+	document.body.appendChild( Tetris.stats.domElement );
+
+	document.getElementById("play_button").addEventListener('click', function(e){
+		e.preventDefault();
+		Tetris.start();
+	});
+};
+				</pre>
+				<p>우리는 초당 프레임 카운터를 붙였고, 시작 버튼에 Tetris.start() 이벤트를 연결하였습니다. 시작이 되면 어떻게 될까요?</p>
+				<pre name="code" class="javascript:nogutter">
+Tetris.start = function(){
+	document.getElementById("menu").style.display = "none";
+	Tetris.pointsDOM = document.getElementById("points");
+	Tetris.pointsDOM.style.display = "block";
+	Tetris.animate();
+};
+				</pre>
+				<h4>게임 루프</h4>
+				<p>왜 애니메이션에 setInterval 함수가 없는지 궁금해 하실 것 같은데요. requestAnimationFrame() 이라고 하는 훨씬 좋은 함수가 있습니다. 이 함수는 브라우저가 분주하게 돌아가지 않을 때만 호출이 되는 함수입니다. 그리고 초당 60회 까지만 호출되는 함수이죠. 이 말의 의미는 초당 렌더링할 수 있는 프레임의 갯수가 제한되어 있다는 말입니다. 최적의 프레임 수이기 때문에 적합한 프레임 수를 찾으려고 할 필요가 없습니다. 이 함수는 아직까지는 새로운 함수라서 다음과 같이 초기화를 해 주어야 합니다.</p>
 				
+				<pre name="code" class="javascript:nogutter">
+if( !window.requestAnimationFrame ) {
+	window.requestAnimaitionFrame = (function(){
+		return window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame ||
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+			window.setTimeout( callback, 1000 / 60 );
+		};
+	})();
+}
+				</pre>
+				<p>
+					이제 우리는 animate() 함수를 쓸 때가 되었습니다. Tetris 는 실시간 게임이지만, 게임의 각각의 단계는 매우 오래 걸립니다. 우리는 블록이 앞으로 전진할 때를 계산해 줄 필요가 있습니다. 그래서 시간과 관련된 변수들이 필요합니다.					
+				</p>
+				<pre name="code" class="javascript:nogutter">
+Tetris.gameStepTime = 1000;
+Tetris.frameTime = 0; //ms
+Tetris.cumulatedFrameTime = 0; // ms
+Tetris._lastFrameTime = Date.now(); // timestamp
+Tetris.gameOver = false;
+				</pre>
+				<p>
+					이제 우리의 단순화 시킨 animate 함수가 Three.js 렌더러를 호출하고, 스스로를 requestAnimationFrame 함수로 재귀적으로 실행시킵니다.
+				</p>
+				<pre name="code" class="javascript:nogutter">
+Tetris.animate = function(){
+	var time = Date.now();
+	Tetris.frameTime = time - Tetris._lastFrameTime;
+	Tetris._lastFrameTime = time;
+	Tetris.cumulatedFrameTime += Tetris.frameTime;
+	
+	while( Tetris.cumulatedFrameTime > Tetris.gameStepTime ) {
+		//블럭이동이 여기에서 실행됩니다.
+		Tetris.cumulatedFrameTime -= Tetris.gameStepTime;
+	}
+	
+	Tetris.renderer.render( Tetris.scene, Tetris.camera );
+	Tetris.stats.update();
+	if( !Tetris.gameOver ) window.requestAnimationFrame( Tetris.animate );
+};
+				</pre>
+				<p>
+					눈치챘을지도 모르겠지만, stats 업데이틀 보다 장황하게 할 수도 있습니다. Stats 프레임 갯수를 카운팅 하는데 우리는 같은 일을 했습니다.  ....					
+				</p>
+				<p>
+					마지막으로, 우리는 init 함수를 호출합니다.
+				</p>
+				<pre name="code" class="javascript:nogutter">
+window.addEventListener("load", Tetris.init);
+				</pre>
+				<p>
+					지금까지의 <a href="examples/Threejs-Tetris-1/index.html" target="_blank">결과</a>와 전제 스크립트 입니다.
+				</p>
+				<pre name="code" class="javascript:nogutter">
+if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = (function () {
+        return window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (/* function FrameRequestCallback */
+            callback, /* DOMElement Element */
+            element) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+    })();
+}
+
+var Tetris = {};
+
+Tetris.init = function () {
+    // set the scene size
+    var WIDTH = window.innerWidth,
+    HEIGHT = window.innerHeight;
+    
+    // set some camera attributes
+    var VIEW_ANGLE = 45,
+    ASPECT = WIDTH / HEIGHT,
+    NEAR = 0.1,
+    FAR = 10000;
+    
+    // create a WebGL renderer, camera
+    // and a scene
+    Tetris.renderer = new THREE.WebGLRenderer();
+    Tetris.camera = new THREE.PerspectiveCamera(VIEW_ANGLE,
+            ASPECT,
+            NEAR,
+            FAR);
+    Tetris.scene = new THREE.Scene();
+    
+    // the camera starts at 0,0,0 so pull it back
+    Tetris.camera.position.z = 600;
+    Tetris.scene.add(Tetris.camera);
+    
+    // start the renderer
+    Tetris.renderer.setSize(WIDTH, HEIGHT);
+    
+    // attach the render-supplied DOM element
+    document.body.appendChild(Tetris.renderer.domElement);
+    
+    // configuration object
+    var boundingBoxConfig = {
+        width : 360,
+        height : 360,
+        depth : 1200,
+        splitX : 6,
+        splitY : 6,
+        splitZ : 20
+    };
+    Tetris.boundingBoxConfig = boundingBoxConfig;
+    Tetris.blockSize = boundingBoxConfig.width / boundingBoxConfig.splitX;
+    
+    var boundingBox = new THREE.Mesh(
+            new THREE.CubeGeometry(
+				boundingBoxConfig.width, 
+				boundingBoxConfig.height, 
+				boundingBoxConfig.depth, 
+				boundingBoxConfig.splitX, 
+				boundingBoxConfig.splitY, 
+				boundingBoxConfig.splitZ),
+            new THREE.MeshBasicMaterial({
+                color : 0xffaa00,
+                wireframe : true
+            }));
+    Tetris.scene.add(boundingBox);
+    
+    Tetris.renderer.render(Tetris.scene, Tetris.camera);
+    
+    Tetris.stats = new Stats();
+    Tetris.stats.domElement.style.position = 'absolute';
+    Tetris.stats.domElement.style.top = '10px';
+    Tetris.stats.domElement.style.left = '10px';
+    document.body.appendChild(Tetris.stats.domElement);
+    
+    document.getElementById("play_button").addEventListener('click', function (event) {
+        event.preventDefault();
+        Tetris.start();
+    });
+};
+
+Tetris.start = function () {
+    document.getElementById("menu").style.display = "none";
+    Tetris.pointsDOM = document.getElementById("points");
+    Tetris.pointsDOM.style.display = "block";
+    
+    Tetris.animate();
+};
+
+Tetris.gameStepTime = 1000;
+
+Tetris.frameTime = 0; // ms
+Tetris.cumulatedFrameTime = 0; // ms
+Tetris._lastFrameTime = Date.now(); // timestamp
+
+Tetris.gameOver = false;
+
+Tetris.animate = function () {
+    var time = Date.now();
+    Tetris.frameTime = time - Tetris._lastFrameTime;
+    Tetris._lastFrameTime = time;
+    Tetris.cumulatedFrameTime += Tetris.frameTime;
+    while (Tetris.cumulatedFrameTime > Tetris.gameStepTime) {
+        // block movement will go here
+        Tetris.cumulatedFrameTime -= Tetris.gameStepTime;
+    }
+    
+    Tetris.renderer.render(Tetris.scene, Tetris.camera);
+    
+    Tetris.stats.update();
+    
+    if (!Tetris.gameOver)
+        window.requestAnimationFrame(Tetris.animate);
+}
+
+window.addEventListener("load", Tetris.init);
+
+				
+				</pre>
 				
 				<h3 id="Make_tetris_2">Part 2</h3>
 				
